@@ -32,5 +32,27 @@
                 });
             });
         </script>
+        <script>
+            function borrar(id){
+                $wal.fire({
+                    title: "Estás seguro?",
+                    text:"No podrás revertir esto",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#309fd6ff",
+                    cancelButtonColor: "rgba(221,79,51,1)",
+                    confirmButtonText:"Si, elimínalo!"
+                }).then((result)=>{
+                if(result.isConfirmed){
+                    $wal.fire({
+                        title: "Borrado!",
+                        text: "Tu registro ha sido eliminado.",
+                        icon: "success"
+                    })
+                    window.location="index.php?txtID="+id;
+                }
+                })
+            }
+        </script>
     </body>
 </html>

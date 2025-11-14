@@ -1,7 +1,7 @@
 <?php 
     // Tercer paso
     session_start();
-    $url_base="http://localhost/bike_store/";
+    $url_base="http://localhost/bike_store_tw1/";
     //Si no existe la session de usuario, redirigimos a la url_base para iniciar session
    /* if(!isset($_SESSION["usuario"])){
         header("Location:".$url_base."login.php");
