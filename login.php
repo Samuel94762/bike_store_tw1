@@ -14,7 +14,7 @@ if ($_POST){
 
     if($registro['n_usuarios']>0){
         $_SESSION['usuario']=$registro["usuario"];
-        $_SESSION['usuario_id']=$registro["usuario_id"];
+        $_SESSION['usuario_id']=$registro["user_id"];
         $_SESSION['email']=$registro["email"];
         $_SESSION['role']=$registro["role"];
         $_SESSION["logueado"]=true;
