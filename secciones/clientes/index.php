@@ -65,9 +65,9 @@ $lista_clientes=$sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $registro['city']; ?></td>
                         <td><?php echo $registro['state']; ?></td>
                         <td><a class="btn btn-outline-primary" 
-                                href="editar.php?txtID=<?php echo $registro['customer_id']; ?>" role="button">Editar</a>
+                                href="editar.php?txtID=<?php echo $registro['customer_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
                             <a class="btn btn-outline-danger" 
-                                href="javascript:borrar(<?php echo $registro['customer_id']; ?>)" role="button">Eliminar</a>
+                                href="javascript:borrar(<?php echo $registro['customer_id']; ?>)" role="button"><i class= "bi bi-trash"></i></a>
                         </td>
                     </tr>
                     <?php }?>
