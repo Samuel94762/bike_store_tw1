@@ -43,7 +43,7 @@
     <body>
         <header>
             <!-- place navbar here -->
-        <nav class="navbar navbar-expand navbar-light bg-light">
+        <nav class="navbar navbar-expand navbar-dark" style="background-color: #06356bff;">
             <ul class="nav navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link active" href="<?php echo $url_base;?>" aria-current="page"
