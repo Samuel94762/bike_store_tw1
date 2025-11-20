@@ -37,7 +37,7 @@ $lista_categorias = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 <br>
 <div class="card">
     <div class="card-header">
-        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button">Nueva Categoría</a>
+        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button"><i class= "bi bi-plus-circle"></i>Nueva Categoría</a>
     </div>
     <div class="card-body">
         <div class="table-responsive-sm">
@@ -55,9 +55,9 @@ $lista_categorias = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td scope="row"><?php echo $categoria['category_id']; ?></td>
                         <td><?php echo $categoria['category_name']; ?></td>
                         <td>
-                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $categoria['category_id']; ?>" role="button">Editar</a>
+                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $categoria['category_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
                             <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $categoria['category_id']; ?>" role="button"
-                            onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')">Eliminar</a>
+                            onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')"><i class= "bi bi-trash"></i></a>
                         </td>
                     </tr>
                     <?php } ?>
