@@ -44,11 +44,11 @@ $lista_usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 <br>
 <div class="card">
     <div class="card-header">
-        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button">Nuevo Usuario</a>
+        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button"> <i class= "bi bi-plus-circle"></i> Nuevo Usuario</a>
     </div>
     <div class="card-body">
         <div class="table-responsive-sm">
-            <table class="table table-primary" id="tabla_id">
+            <table class="table table-light table-hover" id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -78,10 +78,10 @@ $lista_usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                             </span>
                         </td>
                         <td>
-                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $usuario['user_id']; ?>" role="button">Editar</a>
+                            <a class="btn btn-outline-warning" href="editar.php?txtID=<?php echo $usuario['user_id']; ?>" role="button"><i class= "bi bi-pencil-square"></i></a>
                             <?php if($usuario['user_id'] != 1) { ?>
                                 <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $usuario['user_id']; ?>" role="button"
-                                onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">Eliminar</a>
+                                onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')"><i class= "bi bi-trash"></i></a>
                             <?php } else { ?>
                                 <button class="btn btn-outline-secondary" disabled>No eliminar</button>
                             <?php } ?>

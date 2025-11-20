@@ -108,7 +108,7 @@ $lista_clientes = $sentencia_clientes->fetchAll(PDO::FETCH_ASSOC);
                     <option value="Procesando" <?php echo ($estado == 'Procesando') ? 'selected' : ''; ?>>Procesando</option>
                     <option value="Enviado" <?php echo ($estado == 'Enviado') ? 'selected' : ''; ?>>Enviado</option>
                     <option value="Entregado" <?php echo ($estado == 'Entregado') ? 'selected' : ''; ?>>Entregado</option>
-                    <option value="Cancelado" <?php echo ($estado == 'Cancelado') ? 'selected' : ''; ?>>Cancelado</option>
+                    <option value="Anulado" <?php echo ($estado == 'Anulado') ? 'selected' : ''; ?>>Anulado</option>
                 </select>
                 <small id="helpId" class="form-text text-muted">Seleccione el estado del pedido</small>
             </div>

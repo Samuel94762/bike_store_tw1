@@ -10,14 +10,8 @@ if(isset($_GET['txtID'])){
     $sentencia->execute();
     $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
     
-    if($resultado['total'] > 0){
-        $mensaje = "Error: No se puede eliminar el pedido porque tiene items asociados";
-        header("Location: index.php?mensaje=".$mensaje);
-        exit();
-    }
-    
     // Cambiar estado del pedido
-    $sentencia = $conexion->prepare("UPDATE orders SET estado='ANULADO' WHERE order_id = :id");
+    $sentencia = $conexion->prepare("UPDATE orders SET estado='Anulado' WHERE order_id = :id");
     $sentencia->bindParam(":id", $txtID);
     $sentencia->execute();
     
@@ -41,13 +35,13 @@ $lista_pedidos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 <br>
 <div class="card">
     <div class="card-header">
-        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button"><i class= "bi bi-check-lg"></i>Nuevo Pedido</a>
+        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button"><i class= "bi bi-cart-plus"></i> Nuevo Pedido</a>
     </div>
     <div class="card-body">
         <div class="table-responsive-sm">
-            <table class="table table-primary" id="tabla_id">
+            <table class="table table-light table-hover" id="tabla_id">
                 <thead>
-                    <tr>
+                    <tr class="table-dark">
                         <th scope="col">ID</th>
                         <th scope="col">Fecha Pedido</th>
                         <th scope="col">Cliente</th>
@@ -60,7 +54,7 @@ $lista_pedidos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach($lista_pedidos as $pedido) { ?>
                     <tr class="">
-                        <td scope="row"><?php echo $pedido['order_id']; ?></td>
+                        <td scope="row" class="table-secondary"><?php echo $pedido['order_id']; ?></td>
                         <td><?php echo $pedido['order_date']; ?></td>
                         <td><?php echo $pedido['cliente']; ?></small></td>
                         <td>
@@ -71,7 +65,7 @@ $lista_pedidos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                     case 'Procesando': echo 'bg-info'; break;
                                     case 'Enviado': echo 'bg-primary'; break;
                                     case 'Entregado': echo 'bg-success'; break;
-                                    case 'Cancelado': echo 'bg-danger'; break;
+                                    case 'Anulado': echo 'bg-danger'; break;
                                     default: echo 'bg-secondary';
                                 }
                                 ?>">
@@ -81,9 +75,9 @@ $lista_pedidos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $pedido['usuario']; ?></td>
                         <td>$<?php echo number_format($pedido['total_amount'], 2); ?></td>
                         <td>
-                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
+                            <a class="btn btn-outline-warning" href="editar.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class= "bi bi-pencil-square"></i></a>
                             <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class= "bi bi-trash"></i></a>
-                            <a class="btn btn-outline-danger" href="detalle.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class= "bi bi-trash"></i></a>
+                            <a class="btn btn-outline-primary" href="detalle.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class="bi bi-card-list"></i></a>
                         </td>
                     </tr>
                     <?php } ?>

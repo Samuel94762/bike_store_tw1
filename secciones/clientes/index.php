@@ -30,12 +30,12 @@ $lista_clientes=$sentencia->fetchAll(PDO::FETCH_ASSOC);
 <h2>Lista de Clientes</h2>
 <div class="card">
     <div class="card-header">
-        <a class="btn btn-outline-primary" href="crear.php" role="button">Nuevo</a>
+        <a class="btn btn-outline-primary" href="crear.php" role="button"><i class= "bi bi-plus-circle"></i> Nuevo</a>
     </div>
     <div class="card-body">
         <div
             class="table-responsive-sm">
-            <table class="table table-primary" id="tabla_id">
+            <table class="table table-light table-hover" id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -64,8 +64,8 @@ $lista_clientes=$sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $registro['street']; ?></td>
                         <td><?php echo $registro['city']; ?></td>
                         <td><?php echo $registro['state']; ?></td>
-                        <td><a class="btn btn-outline-primary" 
-                                href="editar.php?txtID=<?php echo $registro['customer_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
+                        <td><a class="btn btn-outline-warning" 
+                                href="editar.php?txtID=<?php echo $registro['customer_id']; ?>" role="button"><i class= "bi bi-pencil-square"></i></a>
                             <a class="btn btn-outline-danger" 
                                 href="javascript:borrar(<?php echo $registro['customer_id']; ?>)" role="button"><i class= "bi bi-trash"></i></a>
                         </td>
