@@ -1,5 +1,5 @@
+<?php include("../../templates/header.php"); ?>
 <?php include("../../bd.php");
-
 // Traer los datos de clientes y productos para las listas desplegables 
 $customers = $conexion->query("SELECT customer_id, CONCAT(first_name, ' ' ,last_name) AS name FROM customers ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 $products = $conexion->query("SELECT product_id, product_name, price FROM products ORDER BY product_name")->fetchAll(PDO::FETCH_ASSOC);
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $conexion->commit();
         $_SESSION['mensaje'] = "Pedido registrado satisfactoriamente";
-        header("Location: index.php");
+        header("Location: crear.php");
         exit();
         
     } catch (Exception $e) {
@@ -67,7 +67,6 @@ $usuario_nombre = $_SESSION['usuario'] ?? 'Usuario';
 $usuario_id = $_SESSION['user_id'] ?? 'N/A';
 ?>
 
-<?php include("../../templates/header.php"); ?>
 <br>
 <h3>Registrar nuevo pedido</h3>
 <br>
@@ -112,7 +111,7 @@ $usuario_id = $_SESSION['user_id'] ?? 'N/A';
                     <option value="Procesando">Procesando</option>
                     <option value="Enviado">Enviado</option>
                     <option value="Entregado">Entregado</option>
-                    <option value="Cancelado">Cancelado</option>
+                    <option value="Anulado">Anulado</option>
                 </select>
                 <small class="form-text text-muted">Seleccione el estado del pedido</small>
             </div>
