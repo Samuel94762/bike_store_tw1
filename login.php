@@ -1,31 +1,34 @@
-<?php 
-session_start();
-if ($_POST){
-    include("../../bd.php");
-    $sentencia=$conexion->prepare("SELECT*, count(*) as n_usuario FROM usuarios
-        WHERE usuario=usuario AND clave=clave");
-    $usuario=$_POST['usuario'];
-    $clave=$_POST['clave'];
+<?php
+    //Iniciar la sesion
+    session_start();
+    if($_POST){
+        include("./bd.php");
+        $sentencia=$conexion->prepare("SELECT *, count(*) as n_usuario FROM usuarios
+            WHERE usuario=:usuario AND password=:password");
+        $usuario=$_POST['usuario'];
+        $password=$_POST['password'];
 
-    $sentencia->bindParam("usuario", $usuario);
-    $sentencia->bindParam("clave", $clave);
-    $sentencia->execute();
-    $registro=$sentencia->fetch(PDO::FETCH_LAZY);
+        $sentencia->bindParam(":usuario",$usuario);
+        $sentencia->bindParam(":password",$password);
+        $sentencia->execute();
+        $registro=$sentencia->fetch(PDO::FETCH_LAZY);
 
-    if($registro['n_usuarios']>0){
-        $_SESSION['usuario']=$registro["usuario"];
-        $_SESSION['usuario_id']=$registro["user_id"];
-        $_SESSION['email']=$registro["email"];
-        $_SESSION['role']=$registro["role"];
-        $_SESSION["logueado"]=true;
-        
+        if($registro['n_usuario']>0){
+            $_SESSION['usuario']=$registro["usuario"];
+            $_SESSION['user_id']=$registro["user_id"];
+            $_SESSION['email']=$registro["email"];
+            $_SESSION['role']=$registro["role"];
+            $_SESSION['logueado']=true;
+            header("Location:index.php");
+        }else{
+            $mensaje="Error: El usuario o contraseña son incorrectos";
+        }
     }
-}
 ?>
 <!doctype html>
 <html lang="es">
     <head>
-        <title>Identificación de Usuarios</title>
+        <title>Identificación de usuario</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta
@@ -45,35 +48,45 @@ if ($_POST){
     <body>
         <header>
             <!-- place navbar here -->
-             <divclass="container">
-                <div class="row" >
-                <div class="col-md-4"></div>
-                <div class ="col-md-4">
-                <br><br><br><br><br><br>
-                <div class="card">
-                    <div class="card-header" style="text-align: center"><h5>Iniciar Sesión</h5></div>
-                    <div class="card-body">
-                        <?php if(isset($mensaje)){?>
-                            <div
-                                class="alert alert-danger"
-                                role="alert"
-                            >
-                                <strong><?php echo $mensaje?></strong>
-                            </div>
-                            
-                        <?php 
-                    }?>
-                    
-                        <h4 class="card-title">Title</h4>
-                        <p class="card-text">Text</p>
-                    </div>
-                    <div class="card-footer text-muted">Footer</div>
-                </div>
-                
-             </div>
-             
         </header>
-        <main></main>
+        <main class="container">
+            <div class="row">
+                <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <br><br><br><br><br>
+                        <div class="card">
+                            <div class="card-header" style="text-align: center;"><b>Iniciar Sesión</b></div>
+                            <div class="card-body">
+                                <!-- Agregar una alerta para mostrar el Error -->
+                                <?php if(isset($mensaje)){ ?>
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong><?php echo $mensaje ?></strong>
+                                    </div>
+                                <?php } ?>
+                                <form action="" method="post">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" name="usuario" id="usuario"
+                                            aria-describedby="helpId" placeholder="Usuario"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="password" class="form-control" name="password" id="password"
+                                            placeholder="Contrase&ntilde;a"/>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-secondary">Ingresar</button>
+                                </form>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="mb-3">
+                                    <a href="#">Recordar contrase&ntilde;a</a>
+                                </div>
+                                <div class="mb-3">
+                                    <a href="./secciones/usuarios/crear.php">Crear cuenta</a>
+                                </div>
+                            </div>
+                        </div>           
+                    </div>
+            </div>
+        </main>
         <footer>
             <!-- place footer here -->
         </footer>
@@ -91,5 +104,3 @@ if ($_POST){
         ></script>
     </body>
 </html>
-
- <!-- PRUEBA GITHUB REPO PRIVADO-->

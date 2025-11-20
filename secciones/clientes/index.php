@@ -1,110 +1,79 @@
 <?php include("../../bd.php");
-
-// Eliminar cliente
+//Envio de parametros en la URL o en el metodo GET
 if(isset($_GET['txtID'])){
-    $txtID = (isset($_GET['txtID'])) ? $_GET['txtID'] : "";
-    
-    // Buscar el archivo relacionado con el cliente
-    $sentencia = $conexion->prepare("SELECT imagen FROM customers WHERE customer_id = :id");
-    $sentencia->bindParam(":id", $txtID);
+    $txtID=(isset($_GET['txtID']))?$_GET['txtID']:"";
+    //Buscar el archivo relacionado con el cliente
+    $sentencia=$conexion->prepare("SELECT imagen FROM customers WHERE customer_id=:id");
+    $sentencia->bindParam(":id",$txtID);
     $sentencia->execute();
-    $registro_recuperado = $sentencia->fetch(PDO::FETCH_LAZY);
+    $registro_recuperado=$sentencia->fetch(PDO::FETCH_LAZY);
 
-    // Buscar el registro imagen para borrar
-    if(isset($registro_recuperado['imagen']) && $registro_recuperado['imagen'] != ""){
-        if(file_exists("./imagen/" . $registro_recuperado['imagen'])){
-            unlink("./imagen/" . $registro_recuperado['imagen']);
+    //Buscar el archivo imagen y eliminar
+    if(isset($registro_recuperado['imagen']) && $registro_recuperado['imagen']!=""){
+        if(file_exists("./imagen/".$registro_recuperado['imagen'])){
+            unlink("./imagen/".$registro_recuperado['imagen']);
         }
     }
-
-    // Verificar si hay órdenes asociadas a este cliente
-    $sentencia = $conexion->prepare("SELECT COUNT(*) as total FROM orders WHERE customer_id = :id");
-    $sentencia->bindParam(":id", $txtID);
+    //Borra los datos del cliente
+    $sentencia=$conexion->prepare("DELETE FROM customers WHERE customer_id=:id");
+    $sentencia->bindParam(":id",$txtID);
     $sentencia->execute();
-    $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
-    
-    if($resultado['total'] > 0){
-        $mensaje = "Error: No se puede eliminar el cliente porque tiene órdenes asociadas";
-        header("Location: index.php?mensaje=".$mensaje);
-        exit();
-    }
-    
-    // Borrar datos del cliente
-    $sentencia = $conexion->prepare("DELETE FROM customers WHERE customer_id = :id");
-    $sentencia->bindParam(":id", $txtID);
-    $sentencia->execute();
-    
-    $mensaje = "Cliente eliminado";
-    header("Location: index.php?mensaje=".$mensaje);
+    $mensaje="Registro eliminado";
 }
-
-// Consulta para obtener todos los clientes ORDENADOS POR ID ASCENDENTE
-$sentencia = $conexion->prepare("SELECT * FROM customers ORDER BY customer_id ASC");
+//Consulta para traer los clientes y mostrarlos como unico registro
+$sentencia=$conexion->prepare("SELECT * FROM customers");
 $sentencia->execute();
-$lista_clientes = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-
+$lista_clientes=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+//print_r($lista_clientes);
 ?>
-
-<?php include("../../templates/header.php") ?>
-
-<br>
+<?php include("../../templates/header.php"); ?>
+<h2>Lista de Clientes</h2>
 <div class="card">
     <div class="card-header">
-        <a name="" id="" class="btn btn-outline-primary" href="crear.php" role="button">Nuevo Cliente</a>
+        <a class="btn btn-outline-primary" href="crear.php" role="button">Nuevo</a>
     </div>
     <div class="card-body">
-        <div class="table-responsive-sm">
+        <div
+            class="table-responsive-sm">
             <table class="table table-primary" id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Imagen</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido</th>
-                        <th scope="col">Teléfono</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Calle</th>
+                        <th scope="col">Nombre cliente</th>
+                        <th scope="col">Foto</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Correo Elec.</th>
+                        <th scope="col">Direccion</th>
                         <th scope="col">Ciudad</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Código Postal</th>
+                        <th scope="col">Departamento</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($lista_clientes as $cliente) { ?>
+                    <?php foreach($lista_clientes as $registro) {?>
                     <tr class="">
-                        <td scope="row"><?php echo $cliente['customer_id']; ?></td>
-                        
-                        <td><img width="50" src="./imagen/<?php echo $cliente['imagen']; ?>"
-                            class="img-fluid rounded" alt="Imagen del cliente"/>
+                        <td scope="row"><?php echo $registro['customer_id']; ?></td>
+                        <td><?php echo $registro['first_name']; ?>
+                            <?php echo $registro['last_name']; ?>
                         </td>
-                        <td><?php echo $cliente['first_name']; ?></td>
-                        <td><?php echo $cliente['last_name']; ?></td>
-                        <td><?php echo $cliente['phone'] ? $cliente['phone'] : '<span class="text-muted">N/A</span>'; ?></td>
-                        <td><?php echo $cliente['email']; ?></td>
-                        <td><?php echo $cliente['street'] ? $cliente['street'] : '<span class="text-muted">N/A</span>'; ?></td>
-                        <td><?php echo $cliente['city'] ? $cliente['city'] : '<span class="text-muted">N/A</span>'; ?></td>
-                        <td><?php echo $cliente['state'] ? $cliente['state'] : '<span class="text-muted">N/A</span>'; ?></td>
-                        <td><?php echo $cliente['zip_code'] ? $cliente['zip_code'] : '<span class="text-muted">N/A</span>'; ?></td>
-                        <td>
-                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $cliente['customer_id']; ?>" role="button">Editar</a>
-                            <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $cliente['customer_id']; ?>" role="button"
-                            onclick="return confirm('¿Estás seguro de que quieres eliminar este cliente?')">Eliminar</a>
+                        <td><img width="50" src="./imagen/<?php echo $registro['imagen']; ?>"
+                            class="img-fluid rounded" alt="Foto del cliente"/>
+                        </td>
+                        <td><?php echo $registro['phone']; ?></td>
+                        <td><?php echo $registro['email']; ?></td>
+                        <td><?php echo $registro['street']; ?></td>
+                        <td><?php echo $registro['city']; ?></td>
+                        <td><?php echo $registro['state']; ?></td>
+                        <td><a class="btn btn-outline-primary" 
+                                href="editar.php?txtID=<?php echo $registro['customer_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
+                            <a class="btn btn-outline-danger" 
+                                href="javascript:borrar(<?php echo $registro['customer_id']; ?>)" role="button"><i class= "bi bi-trash"></i></a>
                         </td>
                     </tr>
-                    <?php } ?>
+                    <?php }?>
                 </tbody>
             </table>
         </div>
-        
-    </div>
-    <div class="card-footer text-muted">
-        <?php 
-        if(isset($_GET['mensaje'])) {
-            echo $_GET['mensaje'];
-        }
-        ?>
     </div>
 </div>
-
-<?php include("../../templates/footer.php") ?>
+<?php include("../../templates/footer.php"); ?>

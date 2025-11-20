@@ -3,10 +3,11 @@
     session_start();
     $url_base="http://localhost/bike_store_tw1/";
     //Si no existe la session de usuario, redirigimos a la url_base para iniciar session
-   /* if(!isset($_SESSION["usuario"])){
+    if(!isset($_SESSION["usuario"])){
         header("Location:".$url_base."login.php");
-    }*/
+    }
 ?>
+
 <!doctype html>
 <html lang="es">
     <head>
@@ -25,16 +26,18 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
-
-        <!-- JQuery Min  v3.7.1 -->
+        <!-- Add Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+        <!-- Jquery min v3.7.1 -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
             crossorigin="anonymous">
         </script>
-
         <!-- DataTables CSS v2.3.4 -->
         <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.css" />
         <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+        <!-- Sweeralert2 v11 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 
     <body>
@@ -72,5 +75,12 @@
                 </li>
             </ul>
         </nav>
+        <br>
         </header>
         <main class="container">
+        <!-- Si hubo envio de mensaje entonces visualizams el mensaje -->
+        <?php if(isset($_GET['mensaje'])) { ?>
+        <script>
+            Swal.fire({icon:"success", title:"<?php echo $_GET['mensaje']; ?>"});
+        </script>
+        <?php } ?>
