@@ -66,9 +66,10 @@ $lista_productos =$sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $registro['price'] ?></td>
                         <td><?php echo $registro['category'] ?></td>
                         <td>
-                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $registro['product_id']; ?>" role="button">Editar</a>
-                            <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $registro['product_id']; ?>" role="button"
-                            onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?')">Eliminar</a>
+                            <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $registro['product_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
+                            <a class="btn btn-outline-danger" 
+                                href="javascript:borrar(<?php echo $registro['product_id']; ?>)" role="button"><i class= "bi bi-trash"></i></a>
+                        
                         </td>
                     </tr>
                     <?php } ?>

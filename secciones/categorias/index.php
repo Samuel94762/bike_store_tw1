@@ -56,8 +56,8 @@ $lista_categorias = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $categoria['category_name']; ?></td>
                         <td>
                             <a class="btn btn-outline-primary" href="editar.php?txtID=<?php echo $categoria['category_id']; ?>" role="button"><i class= "bi bi-check-lg"></i></a>
-                            <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $categoria['category_id']; ?>" role="button"
-                            onclick="return confirm('¿Estás seguro de que quieres eliminar esta categoría?')"><i class= "bi bi-trash"></i></a>
+                            <a class="btn btn-outline-danger" 
+                                href="javascript:borrar(<?php echo $categoria['category_id']; ?>)" role="button"><i class= "bi bi-trash"></i></a>
                         </td>
                     </tr>
                     <?php } ?>
