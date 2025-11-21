@@ -50,7 +50,7 @@ $lista_usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
         <div class="table-responsive-sm">
             <table class="table table-light table-hover" id="tabla_id">
                 <thead>
-                    <tr>
+                    <tr class="table-dark">
                         <th scope="col">ID</th>
                         <th scope="col">Usuario</th>
                         <th scope="col">Email</th>
