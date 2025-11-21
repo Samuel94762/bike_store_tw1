@@ -30,7 +30,7 @@ $lista_stores =$sentencia->fetchAll(PDO::FETCH_ASSOC);
         <div class="table-responsive-sm">
             <table class="table table-light table-hover" id="tabla_id">
                 <thead>
-                    <tr>
+                    <tr class="table-dark">
                         <th scope="col">ID</th>
                         <th scope="col">Tienda</th>
                         <th scope="col">Teléfono</th>
@@ -45,7 +45,7 @@ $lista_stores =$sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach($lista_stores as $registro) { ?>
                     <tr class="">
-                        <td scope="row"><?php echo $registro['store_id']; ?></td>
+                        <td scope="row" class="table-secondary"><?php echo $registro['store_id']; ?></td>
                         <td><?php echo $registro['store_name']; ?></td>
                         <td><?php echo $registro['phone'] ?></td>
                         <td><?php echo $registro['email'] ?></td>
