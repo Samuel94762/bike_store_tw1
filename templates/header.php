@@ -71,6 +71,9 @@
                     <a class="nav-link" href="<?php echo $url_base;?>secciones/usuarios/">Usuarios</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="<?php echo $url_base;?>secciones/stocks/">Stocks</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo $url_base;?>cerrar.php">Cerrar Sesion</a>
                 </li>
             </ul>
