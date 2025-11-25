@@ -75,9 +75,10 @@ $lista_pedidos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $pedido['usuario']; ?></td>
                         <td>$<?php echo number_format($pedido['total_amount'], 2); ?></td>
                         <td>
+                            <a class="btn btn-outline-primary" href="detalle.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class="bi bi-eye"></i></a>
                             <a class="btn btn-outline-warning" href="editar.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class= "bi bi-pencil-square"></i></a>
                             <a class="btn btn-outline-danger" href="index.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class= "bi bi-trash"></i></a>
-                            <a class="btn btn-outline-primary" href="detalle.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class="bi bi-card-list"></i></a>
+                            <a class="btn btn-outline-success" href="factura.php?txtID=<?php echo $pedido['order_id']; ?>" role="button"><i class="bi bi-printer"></i></a>
                         </td>
                     </tr>
                     <?php } ?>
