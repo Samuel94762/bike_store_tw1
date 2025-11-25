@@ -9,11 +9,13 @@ o.order_date,u.usuario,o.total_amount,p.product_name,oi.quantity,oi.price,oi.dis
 ((oi.quantity * oi.price) - ((oi.quantity * oi.price) * oi.discount * 100 /100)) as subtotal 
 FROM orders o inner join order_items oi on o.order_id = oi.order_id 
 inner join customers c on o.customer_id = c.customer_id
-inner join usuarios u on o.user_id = u.usuario_id 
+inner join usuarios u on o.user_id = u.user_id 
 inner join products p on oi.product_id = p.product_id
 WHERE o.order_id=$txtID");
 $sentencia->execute();
 $lista_pedidos_detalle=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+$cliente = $lista_pedidos_detalle[0];
+
 //marcamos el HTML
 ob_start();
 ?>
@@ -57,9 +59,9 @@ ob_start();
             </div>
             <hr>
             <div>
-                <p>Razon Social :   Cliente</p>
+                <p>Razon Social :   <?php echo $cliente["cliente"]?></p>
                 <p>NIT/CI/CEX :     79456123</p>
-                <P>Codigo Cliente : IDcliente</P>
+                <P>Codigo Cliente : <?php echo $cliente["customer_id"]?></P>
                 <p>Fecha Emision :  fechaPedido</p>
             </div>
             <hr>
