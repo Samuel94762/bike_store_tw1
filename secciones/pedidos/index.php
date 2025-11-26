@@ -20,11 +20,12 @@ if(isset($_GET['txtID'])){
 }
 
 // Consulta para obtener todos los pedidos con información del cliente
-$sentencia = $conexion->prepare("SELECT *, 
-                                (SELECT CONCAT(first_name, ' ', last_name) AS nombre_completo FROM customers
-                                WHERE customer_id=orders.customer_id LIMIT 1) as cliente,
-                                (SELECT usuario FROM usuarios WHERE user_id=orders.user_id LIMIT 1) AS usuario
-                                FROM orders ");
+$sentencia = $conexion->prepare("SELECT o.*, 
+                                CONCAT(COALESCE(c.first_name,''), ' ', COALESCE(c.last_name,'')) AS cliente,
+                                COALESCE(u.usuario, '') AS usuario
+                                FROM orders o
+                                LEFT JOIN customers c ON c.customer_id = o.customer_id
+                                LEFT JOIN usuarios u ON u.user_id = o.user_id");
 $sentencia->execute();
 $lista_pedidos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 

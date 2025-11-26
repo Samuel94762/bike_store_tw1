@@ -1,10 +1,11 @@
 <?php 
-    // Tercer paso
-    session_start();
-    $url_base="http://localhost/bike_store_tw1/";
-    //Si no existe la session de usuario, redirigimos a la url_base para iniciar session
-    if(!isset($_SESSION["usuario"])){
-        header("Location:".$url_base."login.php");
+    include_once(__DIR__ . '/../config.php');
+    $url_base = APP_URL;
+    
+    // Si no está logueado, redirigir a landing
+    if (!is_logged_in()) {
+        header("Location:" . $url_base . "landing.php");
+        exit;
     }
 ?>
 

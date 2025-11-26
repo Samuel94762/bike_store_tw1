@@ -1,19 +1,33 @@
-<?php include("../../bd.php");
-//Envio de parametros en la URL o en el metodo GET
-if(isset($_GET['txtID'])){
-    $txtID=(isset($_GET['txtID']))?$_GET['txtID']:"";
+<?php
+if (!isset($conexion)) {
+    include("../../bd.php");
 }
-//Consulta para traer los pedidos y mostrarlos como unico registro
-$sentencia=$conexion->prepare("SELECT CONCAT(c.first_name,' ',c.last_name) as cliente,c.customer_id,
+//Envio de parametros en la URL o en el metodo GET
+if (isset($_GET['txtID'])) {
+    $txtID = $_GET['txtID'];
+} else {
+    $txtID = null;
+}
+
+// Consulta parametrizada para traer los pedidos y mostrarlos como unico registro
+$sentencia = $conexion->prepare("SELECT CONCAT(c.first_name,' ',c.last_name) as cliente,c.customer_id,
 o.order_date,u.usuario,o.total_amount,p.product_name,oi.quantity,oi.price,oi.discount,
-((oi.quantity * oi.price) - ((oi.quantity * oi.price) * oi.discount * 100 /100)) as subtotal 
-FROM orders o inner join order_items oi on o.order_id = oi.order_id 
-inner join customers c on o.customer_id = c.customer_id
-inner join usuarios u on o.user_id = u.user_id 
-inner join products p on oi.product_id = p.product_id
-WHERE o.order_id=$txtID");
+((oi.quantity * oi.price) - ((oi.quantity * oi.price) * oi.discount * 100 /100)) as subtotal
+FROM orders o
+INNER JOIN order_items oi ON o.order_id = oi.order_id
+INNER JOIN customers c ON o.customer_id = c.customer_id
+INNER JOIN usuarios u ON o.user_id = u.user_id
+INNER JOIN products p ON oi.product_id = p.product_id
+WHERE o.order_id = :txtID");
+$sentencia->bindValue(':txtID', $txtID, PDO::PARAM_INT);
 $sentencia->execute();
-$lista_pedidos_detalle=$sentencia->fetchAll(PDO::FETCH_ASSOC);
+$lista_pedidos_detalle = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+if (!$lista_pedidos_detalle || count($lista_pedidos_detalle) === 0) {
+    echo '<p>Error: no se encontró la orden o no hay detalles para el pedido.</p>';
+    exit;
+}
+
 $cliente = $lista_pedidos_detalle[0];
 
 //marcamos el HTML
@@ -81,16 +95,16 @@ ob_start();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($lista_pedidos_detalle as $registro) { $item=1; ?>
+                        <?php $item = 1; foreach($lista_pedidos_detalle as $registro) { ?>
                         <tr class="">
                             <td scope="row"><?php echo $item; ?></td>
                             <td><?php echo $registro['product_name']; ?></td>
                             <td><?php echo $registro['quantity']; ?></td>
                             <td><?php echo $registro['price']; ?></td>
                             <td><?php echo $registro['discount']; ?></td>
-                            <td><?php echo $registro['subtotal']; ++$item; ?></td>   
+                            <td><?php echo $registro['subtotal']; ?></td>
                         </tr>
-                        <?php }?>
+                        <?php $item++; } ?>
                     </tbody>
                 </table>
             </div>
@@ -113,5 +127,11 @@ ob_start();
     $dompdf->loadHTML($HTML);
     $dompdf->setPaper('letter');
     $dompdf->render();
-    $dompdf->stream("Factura.pdf", array("Attachment"=>false));
+    // Si se define CAPTURE_PDF_OUTPUT, devolver el PDF como salida (sin forzar exit ni cabeceras),
+    // de lo contrario hacer el stream normal para descarga/visualización.
+    if (defined('CAPTURE_PDF_OUTPUT') && CAPTURE_PDF_OUTPUT) {
+        echo $dompdf->output();
+    } else {
+        $dompdf->stream("Factura.pdf", array("Attachment"=>false));
+    }
 ?>
