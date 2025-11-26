@@ -1,5 +1,11 @@
 <?php include("../../bd.php");
-
+include("../../config.php");
+    
+    // Verificar si es admin
+    if (!is_admin()) {
+        header("Location: " . APP_URL . "landing.php");
+        exit;
+    }
 if($_POST){
     //Recolectando los datos del método POST
     $product_name=(isset($_POST["product_name"])?$_POST["product_name"]:"");

@@ -161,8 +161,6 @@ $top_products = $sentencia_top->fetchAll(PDO::FETCH_ASSOC);
                                 <i class="bi bi-person-circle"></i> <?php echo $_SESSION['usuario']; ?>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<?php echo APP_URL; ?>secciones/pedidos/">Mis Pedidos</a></li>
-                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="<?php echo APP_URL; ?>cerrar.php">Cerrar Sesión</a></li>
                             </ul>
                         </li>
