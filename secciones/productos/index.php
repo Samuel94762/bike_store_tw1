@@ -26,9 +26,9 @@ if(isset($_GET['txtID'])){
 
 }
 //Consulta para productos para mostrar como uni registro
-$sentencia=$conexion->prepare("SELECT *, 
-(SELECT category_name FROM categories WHERE categories.category_id =products.category_id LIMIT 1 ) as category
-FROM products");
+$sentencia=$conexion->prepare("SELECT p.*, COALESCE(c.category_name, '') AS category
+FROM products p
+LEFT JOIN categories c ON c.category_id = p.category_id");
 $sentencia->execute();
 $lista_productos =$sentencia->fetchAll(PDO::FETCH_ASSOC);
 //print_r($lista_productos);

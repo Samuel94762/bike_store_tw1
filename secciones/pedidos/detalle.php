@@ -4,8 +4,12 @@
 if(isset($_GET['txtID'])){
     $txtID = (isset($_GET['txtID'])) ? $_GET['txtID'] : "";
 }
-    // Cambiar estado del pedido
-    $sentencia = $conexion->prepare("SELECT *,(SELECT product_name FROM products WHERE product_id=order_items.product_id LIMIT 1) AS producto FROM order_items WHERE order_id=$txtID ");
+    // Obtener detalle del pedido usando JOIN para traer nombre del producto
+    $sentencia = $conexion->prepare("SELECT oi.*, COALESCE(p.product_name, '') AS producto
+                                     FROM order_items oi
+                                     LEFT JOIN products p ON p.product_id = oi.product_id
+                                     WHERE oi.order_id = :order_id");
+    $sentencia->bindParam(':order_id', $txtID);
     $sentencia->execute();
     $lista_pedidos_detalle = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     function restarPorcentaje($valor, $porcentaje){

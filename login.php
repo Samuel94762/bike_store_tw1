@@ -1,8 +1,7 @@
 <?php
-    //Iniciar la sesion
-    session_start();
+    include("config.php");
+    
     if($_POST){
-        include("./bd.php");
         $sentencia=$conexion->prepare("SELECT *, count(*) as n_usuario FROM usuarios
             WHERE usuario=:usuario AND password=:password");
         $usuario=$_POST['usuario'];
@@ -19,7 +18,14 @@
             $_SESSION['email']=$registro["email"];
             $_SESSION['role']=$registro["role"];
             $_SESSION['logueado']=true;
-            header("Location:index.php");
+            
+            // Redirigir según el rol
+            if ($registro["role"] === 'admin') {
+                header("Location: index.php");
+            } else {
+                header("Location: landing.php");
+            }
+            exit;
         }else{
             $mensaje="Error: El usuario o contraseña son incorrectos";
         }
