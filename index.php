@@ -1,3 +1,12 @@
+<?php 
+    include("config.php");
+    
+    // Verificar si es admin
+    if (!is_admin()) {
+        header("Location: " . APP_URL . "landing.php");
+        exit;
+    }
+?>
 <?php include("templates/header.php") ?>
 <div class="p-5 mb-4 bg-light rounded-3">
     <div class="container-fluid py-5">
