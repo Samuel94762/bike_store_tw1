@@ -26,6 +26,19 @@ $productos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 $sentencia_categorias = $conexion->prepare("SELECT * FROM categories ORDER BY category_name");
 $sentencia_categorias->execute();
 $categorias = $sentencia_categorias->fetchAll(PDO::FETCH_ASSOC);
+
+// Obtener 5 productos más vendidos (solo órdenes pagadas)
+$sentencia_top = $conexion->prepare(
+    "SELECT p.product_id, p.product_name, p.foto, COALESCE(SUM(oi.quantity),0) AS sold_qty
+     FROM order_items oi
+     JOIN orders o ON oi.order_id = o.order_id AND o.estado = 'Pagado'
+     JOIN products p ON oi.product_id = p.product_id
+     GROUP BY p.product_id
+     ORDER BY sold_qty DESC
+     LIMIT 5"
+);
+$sentencia_top->execute();
+$top_products = $sentencia_top->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -94,6 +107,34 @@ $categorias = $sentencia_categorias->fetchAll(PDO::FETCH_ASSOC);
         main {
             flex: 1;
         }
+        /* Mejorar visibilidad de controles del carrusel Top Sellers */
+        #carouselTopSellers .carousel-control-prev,
+        #carouselTopSellers .carousel-control-next {
+            width: 4rem;
+            opacity: 1;
+            transition: transform .15s ease-in-out;
+            z-index: 5;
+        }
+        #carouselTopSellers .carousel-control-prev:hover,
+        #carouselTopSellers .carousel-control-next:hover {
+            transform: scale(1.05);
+        }
+        #carouselTopSellers .carousel-control-prev-icon,
+        #carouselTopSellers .carousel-control-next-icon {
+            background-color: rgba(6,53,107,0.95);
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 50%;
+            box-shadow: 0 6px 18px rgba(6,53,107,0.35);
+            background-size: 1.6rem 1.6rem;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        /* Asegurar que el icono SVG se vea blanco sobre el fondo */
+        #carouselTopSellers .carousel-control-prev-icon::after,
+        #carouselTopSellers .carousel-control-next-icon::after {
+            content: '';
+        }
     </style>
 </head>
 <body>
@@ -153,6 +194,51 @@ $categorias = $sentencia_categorias->fetchAll(PDO::FETCH_ASSOC);
                 <a href="#categorias" class="btn btn-outline-light btn-lg">Explorar Categorías</a>
             </div>
         </section>
+
+        <!-- Carrusel de Top Sellers -->
+        <?php if (!empty($top_products)): ?>
+        <section id="top-sellers" class="py-4">
+            <div class="container">
+                <div class="row mb-3">
+                    <div class="col-12 text-center">
+                        <h3 class="fw-bold">Top 5 Más Vendidos</h3>
+                        <p class="text-muted">Nuestros productos más populares</p>
+                    </div>
+                </div>
+                <div id="carouselTopSellers" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+                    <!-- Indicadores -->
+                    <div class="carousel-indicators">
+                        <?php foreach($top_products as $i => $tp): ?>
+                            <button type="button" data-bs-target="#carouselTopSellers" data-bs-slide-to="<?php echo $i; ?>" class="<?php echo $i === 0 ? 'active' : ''; ?>" aria-current="<?php echo $i === 0 ? 'true' : 'false'; ?>" aria-label="Slide <?php echo $i+1; ?>"></button>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="carousel-inner">
+                        <?php foreach($top_products as $idx => $tp): ?>
+                        <div class="carousel-item <?php echo $idx === 0 ? 'active' : ''; ?>">
+                            <div class="d-flex justify-content-center align-items-center" style="min-height:320px;">
+                                <div class="card" style="width: 40rem; border:none;">
+                                    <img src="secciones/productos/imagen/<?php echo htmlspecialchars($tp['foto']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($tp['product_name']); ?>" style="height:320px;object-fit:cover;">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title"><?php echo htmlspecialchars($tp['product_name']); ?></h5>
+                                        <p class="text-muted">Vendidos: <?php echo intval($tp['sold_qty']); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselTopSellers" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselTopSellers" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
 
         <!-- Productos Destacados -->
         <section id="productos" class="py-5 bg-light">
