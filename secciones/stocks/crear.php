@@ -1,5 +1,11 @@
 <?php include("../../bd.php");
-
+include("../../config.php");
+    
+    // Verificar si es admin
+    if (!is_admin()) {
+        header("Location: " . APP_URL . "landing.php");
+        exit;
+    }
 // Traer los productos y tiendas
 $productos = $conexion->query("SELECT product_id, product_name FROM products ORDER BY product_name")->fetchAll(PDO::FETCH_ASSOC);
 $tiendas = $conexion->query("SELECT store_id, store_name FROM stores ORDER BY store_name")->fetchAll(PDO::FETCH_ASSOC);

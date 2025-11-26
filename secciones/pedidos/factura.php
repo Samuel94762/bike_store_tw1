@@ -30,6 +30,12 @@ if (!$lista_pedidos_detalle || count($lista_pedidos_detalle) === 0) {
 
 $cliente = $lista_pedidos_detalle[0];
 
+// Calcular el total sumando todos los subtotales
+$total = 0;
+foreach($lista_pedidos_detalle as $registro) {
+    $total += $registro['subtotal'];
+}
+
 //marcamos el HTML
 ob_start();
 ?>
@@ -51,6 +57,31 @@ ob_start();
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+        <style>
+            .footer-text {
+                text-align: center;
+                font-size: 10px;
+                margin-top: 20px;
+                padding: 10px;
+                border-top: 1px solid #000;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .total-row {
+                font-weight: bold;
+                background-color: #f8f9fa;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -76,7 +107,7 @@ ob_start();
                 <p>Razon Social :   <?php echo $cliente["cliente"]?></p>
                 <p>NIT/CI/CEX :     79456123</p>
                 <P>Codigo Cliente : <?php echo $cliente["customer_id"]?></P>
-                <p>Fecha Emision :  fechaPedido</p>
+                <p>Fecha Emision :  <?php echo $cliente["order_date"]?></p>
             </div>
             <hr>
         </header>
@@ -100,17 +131,24 @@ ob_start();
                             <td scope="row"><?php echo $item; ?></td>
                             <td><?php echo $registro['product_name']; ?></td>
                             <td><?php echo $registro['quantity']; ?></td>
-                            <td><?php echo $registro['price']; ?></td>
+                            <td><?php echo number_format($registro['price'], 2); ?></td>
                             <td><?php echo $registro['discount']; ?></td>
-                            <td><?php echo $registro['subtotal']; ?></td>
+                            <td><?php echo number_format($registro['subtotal'], 2); ?></td>
                         </tr>
                         <?php $item++; } ?>
+                        <!-- Fila del total -->
+                        <tr class="total-row">
+                            <td colspan="5" style="text-align: right;"><strong>TOTAL:</strong></td>
+                            <td><strong><?php echo number_format($total, 2); ?></strong></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </main>
         <footer>
-            <!-- place footer here -->
+            <div class="footer-text">
+                <p>Esta factura contribuye al desarrollo del país, el uso ilícito de esta será sancionado de acuerdo a la ley</p>
+            </div>
         </footer>
     </body>
 </html>

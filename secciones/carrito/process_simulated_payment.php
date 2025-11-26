@@ -37,12 +37,19 @@ try {
             $customer_id = $cliente['customer_id'];
         }
 
+        // CALCULAR EL TOTAL CORRECTAMENTE
+        $total_amount = 0;
+        foreach ($carrito_items as $item) {
+            $total_amount += $item['price'] * $item['quantity'];
+        }
+
         $order_date = date('Y-m-d');
         $sentencia = $conexion->prepare("INSERT INTO orders (customer_id, order_date, user_id, estado, total_amount) VALUES (:customer_id, :order_date, :user_id, 'Pendiente', :total_amount)");
         $sentencia->bindValue(':customer_id', $customer_id);
         $sentencia->bindValue(':order_date', $order_date);
         $sentencia->bindValue(':user_id', $_SESSION['user_id']);
-        $sentencia->bindValue(':total_amount', $pending_total);
+        // CORREGIDO: Usar el total_amount calculado en lugar de $pending_total
+        $sentencia->bindValue(':total_amount', $total_amount);
         $sentencia->execute();
         $pending_order_id = $conexion->lastInsertId();
 

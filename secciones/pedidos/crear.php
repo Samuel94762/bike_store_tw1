@@ -1,5 +1,12 @@
 <?php include("../../templates/header.php"); ?>
 <?php include("../../bd.php");
+include("../../config.php");
+    
+    // Verificar si es admin
+    if (!is_admin()) {
+        header("Location: " . APP_URL . "landing.php");
+        exit;
+    }
 // Traer los datos de clientes y productos para las listas desplegables 
 $customers = $conexion->query("SELECT customer_id, CONCAT(first_name, ' ' ,last_name) AS name FROM customers ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 $products = $conexion->query("SELECT product_id, product_name, price FROM products ORDER BY product_name")->fetchAll(PDO::FETCH_ASSOC);

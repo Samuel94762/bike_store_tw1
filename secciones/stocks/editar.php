@@ -1,5 +1,11 @@
 <?php include("../../bd.php");
-
+include("../../config.php");
+    
+    // Verificar si es admin
+    if (!is_admin()) {
+        header("Location: " . APP_URL . "landing.php");
+        exit;
+    }
 // Recuperar el ID de stock a editar
 if (isset($_GET['txtID'])) {
     $stock_id = $_GET['txtID'];

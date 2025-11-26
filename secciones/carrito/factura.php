@@ -117,8 +117,7 @@ function generar_html_factura($orden, $items) {
         $total_price += $item['price'] * $item['quantity'];
     }
     
-    $tax = $total_price * 0.16;
-    $total = $total_price + $tax;
+    $total = $total_price
     
     $html = '
     <!DOCTYPE html>

@@ -1,5 +1,11 @@
 <?php include("../../bd.php");
-
+include("../../config.php");
+    
+    // Verificar si es admin
+    if (!is_admin()) {
+        header("Location: " . APP_URL . "landing.php");
+        exit;
+    }
 // Eliminar pedido
 if(isset($_GET['txtID'])){
     $txtID = (isset($_GET['txtID'])) ? $_GET['txtID'] : "";
