@@ -36,6 +36,47 @@ foreach($lista_pedidos_detalle as $registro) {
     $total += $registro['subtotal'];
 }
 
+// Función para generar QR
+function generarQRFactura($pedido, $items, $totalGeneral) {
+    // Crear lista de productos para el QR
+    $productosQR = "";
+    $contador = 1;
+    foreach($items as $item) {
+        $productosQR .= "{$contador}. {$item['product_name']} - {$item['quantity']} x Bs " . number_format($item['price'], 2) . "\n";
+        $contador++;
+    }
+    
+    $qrData = "FACTURA BEST BIKES EVER\n" .
+              "========================\n" .
+              "N° FACTURA: 4561\n" .
+              "NIT: 3139568974\n" .
+              "AUTORIZACIÓN: 1234567890123456789CUH9999\n" .
+              "========================\n" .
+              "CLIENTE: {$pedido['cliente']}\n" .
+              "NIT/CI: 79456123\n" .
+              "COD CLIENTE: {$pedido['customer_id']}\n" .
+              "FECHA: {$pedido['order_date']}\n" .
+              "========================\n" .
+              "PRODUCTOS:\n" . $productosQR .
+              "========================\n" .
+              "TOTAL: Bs " . number_format($totalGeneral, 2) . "\n" .
+              "========================\n" .
+              "CASA MATRIZ - SANTA CRUZ\n" .
+              "Tel: 68689162\n" .
+              "Gracias por su compra!";
+    
+    // Codificar datos para URL
+    $datosCodificados = urlencode($qrData);
+    
+    // Usar API gratuita de QR Code
+    $urlAPI = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . $datosCodificados;
+    
+    return $urlAPI;
+}
+
+// GENERAR CÓDIGO QR
+$qrURL = generarQRFactura($cliente, $lista_pedidos_detalle, $total);
+
 //marcamos el HTML
 ob_start();
 ?>
@@ -81,6 +122,25 @@ ob_start();
                 font-weight: bold;
                 background-color: #f8f9fa;
             }
+            .qr-container {
+                text-align: center;
+                margin: 20px 0;
+                padding: 15px;
+                border: 1px solid #ddd;
+                background-color: #f9f9f9;
+                border-radius: 5px;
+            }
+            .qr-title {
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: #333;
+            }
+            .qr-subtitle {
+                font-size: 10px;
+                color: #666;
+                margin-top: 5px;
+            }
         </style>
     </head>
     <body>
@@ -110,6 +170,15 @@ ob_start();
                 <p>Fecha Emision :  <?php echo $cliente["order_date"]?></p>
             </div>
             <hr>
+            
+            <!-- Sección del código QR -->
+            <div class="qr-container">
+                <div class="qr-title">CÓDIGO QR - FACTURA ELECTRÓNICA</div>
+                <img src="<?php echo $qrURL; ?>" alt="Código QR Factura" style="width: 150px; height: 150px;">
+                <div class="qr-subtitle">
+                    Escanee para ver los detalles de la factura
+                </div>
+            </div>
         </header>
         <main>
             <div>
